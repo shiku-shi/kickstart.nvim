@@ -496,6 +496,7 @@ require('lazy').setup({
             },
           },
         },
+        ansiblels = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -559,12 +560,14 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'black', 'isort' },
+        python = { 'black', 'isort', 'double_indent' },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
         -- javascript = { { "prettierd", "prettier" } },
         markdown = { 'deno_fmt' },
+        json = { 'deno_fmt' },
+        yaml = { 'yamlfmt' },
       },
     },
   },
@@ -736,7 +739,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'vim', 'vimdoc', 'python' },
+      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'vim', 'vimdoc', 'python', 'dockerfile', 'json' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -746,7 +749,7 @@ require('lazy').setup({
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true, disable = { 'ruby', 'markdown' } },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -810,5 +813,6 @@ require('lazy').setup({
 })
 
 require 'custom.remap'
+require 'custom.set'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
