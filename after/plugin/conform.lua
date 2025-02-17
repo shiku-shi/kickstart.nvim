@@ -1,10 +1,6 @@
-require('conform').formatters.double_indent = {
-  inherit = false,
-  command = 'double-indent',
-  args = { '$FILENAME' },
-  stdin = false,
-  tmpfile_format = '.conform.$RANDOM.$FILENAME',
-  exit_codes = { 0, 1 },
+require('conform').formatters.black = {
+  inherit = true,
+  prepend_args = { '--line-length', '80' },
 }
 
 require('conform').formatters.isort = {
