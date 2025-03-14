@@ -1,8 +1,3 @@
-require('conform').formatters.black = {
-  inherit = true,
-  prepend_args = { '--line-length', '80' },
-}
-
 require('conform').formatters.isort = {
   inherit = true,
   prepend_args = { '--profile', 'black' },
