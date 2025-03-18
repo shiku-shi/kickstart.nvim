@@ -4,9 +4,9 @@ vim.opt.spelllang = { 'en_us', 'ru_ru' }
 vim.cmd 'language en_US.UTF-8'
 
 local patterns = {}
-for _, dir in ipairs { 'roles', 'playbooks', 'hosts' } do
+for _, dir in ipairs { 'ansible', 'roles', 'playbooks', 'inventory' } do
   for _, ext in ipairs { 'yml', 'yaml' } do
-    table.insert(patterns, dir .. '**/*.' .. ext)
+    table.insert(patterns, '**/' .. dir .. '/**/*.' .. ext)
   end
 end
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
