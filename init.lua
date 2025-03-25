@@ -626,6 +626,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'markdownlint',
         'marksman',
+        'ansible-lint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
