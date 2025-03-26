@@ -612,12 +612,6 @@ require('lazy').setup({
           },
         },
         ansiblels = {},
-
-        ruff = {
-          init_options = {
-            settings = {},
-          },
-        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -638,7 +632,6 @@ require('lazy').setup({
         'ansible-lint',
         'markdownlint',
         'marksman',
-        'ruff',
         'stylua', -- Used to format Lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
