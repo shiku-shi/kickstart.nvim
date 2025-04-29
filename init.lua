@@ -612,6 +612,9 @@ require('lazy').setup({
           },
         },
         ansiblels = {},
+        jinja_lsp = {
+          filetypes = { 'jinja', 'j2' },
+        },
       }
 
       -- Ensure the servers and tools above are installed
