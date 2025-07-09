@@ -4,6 +4,8 @@ vim.opt.relativenumber = true
 
 vim.cmd 'language en_US.UTF-8'
 
+vim.cmd.colorscheme 'rose-pine'
+
 local patterns = {}
 for _, dir in ipairs { 'ansible', 'roles', 'playbooks', 'inventory' } do
   for _, ext in ipairs { 'yml', 'yaml' } do
@@ -25,3 +27,7 @@ vim.filetype.add {
     j2 = 'jinja',
   },
 }
+
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
