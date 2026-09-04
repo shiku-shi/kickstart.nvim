@@ -3,6 +3,11 @@ require('conform').formatters.isort = {
   prepend_args = { '--profile', 'black' },
 }
 
+require('conform').formatters.black = {
+  inherit = true,
+  prepend_args = { '--line-length', '120' },
+}
+
 require('conform').formatters.yamlfmt = {
   inherit = true,
   prepend_args = { '-formatter', 'retain_line_breaks=true' },
