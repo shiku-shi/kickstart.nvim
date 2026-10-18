@@ -144,6 +144,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end,
 })
 
+-- Must run before lazy.nvim so plugin builds and treesitter parsers find the compiler
+require 'custom.windows'
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -576,6 +579,12 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         -- You can add other tools here that you want Mason to install
+        'ruff', -- python linter (nvim-lint)
+        'markdownlint', -- markdown linter (nvim-lint)
+        'isort', -- python formatters (conform)
+        'black',
+        'prettier', -- js/json/markdown formatter (conform)
+        'gdtoolkit', -- gdformat / gdlint for Godot
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -627,7 +636,8 @@ require('lazy').setup({
         -- You can use 'stop_after_first' to run the first available formatter from the list
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         json = { 'prettierd', 'prettier', stop_after_first = true },
-        markdown = { 'prettierd', 'prettier', stop_after_first = true }
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        gdscript = { 'gdformat' },
       },
     },
   },
@@ -809,7 +819,7 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
       -- ensure basic parser are installed
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'gdscript', 'godot_resource', 'gdshader' }
       require('nvim-treesitter').install(parsers)
 
       ---@param buf integer
@@ -909,5 +919,6 @@ require('lazy').setup({
 
 require 'custom.remap'
 require 'custom.set'
+require 'custom.godot'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
