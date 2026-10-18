@@ -1,7 +1,2 @@
-return {
-  'danymat/neogen',
-  config = true,
-  -- Uncomment next line if you want to follow only stable versions
-  --     -- version = "*"
-  --
-}
+vim.pack.add { 'https://github.com/danymat/neogen' }
+require('neogen').setup {}

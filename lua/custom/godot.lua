@@ -3,12 +3,14 @@
 -- 1. GDScript LSP: the Godot editor runs a language server on 127.0.0.1:6005
 --    (Editor Settings > Network > Language Server). Keep Godot open while editing.
 -- 2. External editor: when Neovim is started inside a Godot project it listens on
---    a named pipe, so Godot can open scripts in this instance. Point Godot at it with
---    Editor Settings > Text Editor > External:
---      Exec Path:  <nvim config>/scripts/godot-nvim.cmd
+--    a named pipe (Windows) or socket (macOS/Linux), so Godot can open scripts in
+--    this instance. Point Godot at it with Editor Settings > Text Editor > External:
+--      Exec Path:  <nvim config>/scripts/godot-nvim.cmd   (Windows)
+--                  <nvim config>/scripts/godot-nvim.sh    (macOS/Linux)
 --      Exec Flags: {file} {line} {col}
 
-local pipe = [[\\.\pipe\godot.pipe]]
+local is_win = vim.fn.has 'win32' == 1
+local pipe = is_win and [[\\.\pipe\godot.pipe]] or '/tmp/godot.pipe' -- keep in sync with scripts/godot-nvim.*
 
 vim.lsp.enable 'gdscript' -- config ships with nvim-lspconfig (connects to Godot over TCP)
 
@@ -26,6 +28,15 @@ vim.api.nvim_create_autocmd('FileType', {
 local function start_server()
   if vim.tbl_contains(vim.fn.serverlist(), pipe) then return end
   if not vim.fs.root(vim.fn.getcwd(), 'project.godot') and not vim.fs.root(0, 'project.godot') then return end
+  -- A Neovim that crashed leaves its socket file behind; remove it if nothing answers on it
+  if not is_win and vim.uv.fs_stat(pipe) then
+    local ok, chan = pcall(vim.fn.sockconnect, 'pipe', pipe)
+    if ok and chan > 0 then
+      vim.fn.chanclose(chan)
+      return
+    end
+    os.remove(pipe)
+  end
   pcall(vim.fn.serverstart, pipe) -- fails quietly if another instance already owns the pipe
 end
 

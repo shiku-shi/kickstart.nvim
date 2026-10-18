@@ -1,5 +1,1 @@
-return {
-  'xero/miasma.nvim',
-  lazy = false,
-  priority = 1000,
-}
+vim.pack.add { 'https://github.com/xero/miasma.nvim' }

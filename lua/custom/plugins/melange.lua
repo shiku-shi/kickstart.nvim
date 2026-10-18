@@ -1,4 +1,1 @@
-return {
-  'savq/melange-nvim',
-  priority = 1000,
-}
+vim.pack.add { 'https://github.com/savq/melange-nvim' }

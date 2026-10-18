@@ -15,9 +15,7 @@ for _, dir in ipairs { 'ansible', 'roles', 'playbooks', 'inventory' } do
 end
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = patterns,
-  callback = function()
-    vim.bo.filetype = 'yaml.ansible'
-  end,
+  callback = function() vim.bo.filetype = 'yaml.ansible' end,
 })
 
 vim.filetype.add {
@@ -33,7 +31,7 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 vim.opt.autoread = true
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-  pattern = "*",
-  command = "silent! checktime",
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold', 'CursorHoldI' }, {
+  pattern = '*',
+  command = 'silent! checktime',
 })

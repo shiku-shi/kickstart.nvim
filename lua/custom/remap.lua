@@ -2,9 +2,7 @@ vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = 'Open file explorer' })
 
 vim.cmd 'set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz'
 
-vim.keymap.set('n', '<leader>nf', function()
-  require('neogen').generate { type = 'func' }
-end, { desc = 'Generate function docstring' })
+vim.keymap.set('n', '<leader>nf', function() require('neogen').generate { type = 'func' } end, { desc = 'Generate function docstring' })
 
 vim.keymap.set('n', '<leader>wz', function()
   require('zen-mode').toggle {
@@ -19,26 +17,31 @@ end, { desc = 'Toggle Zen Mode' })
 local Terminal = require('toggleterm.terminal').Terminal
 local lazygit = Terminal:new { cmd = 'lazygit', hidden = true, direction = 'float' }
 
-vim.keymap.set('n', '<leader>og', function()
-  lazygit:toggle()
-end, { desc = '[O]pen Lazy[G]it' })
+vim.keymap.set('n', '<leader>og', function() lazygit:toggle() end, { desc = '[O]pen Lazy[G]it' })
 
-local function python_env()
-  local cmd
-  if vim.fn.isdirectory '.venv' ~= 0 then
-    cmd = 'source .venv/bin/activate && '
-  elseif vim.fn.isdirectory 'venv' ~= 0 then
-    cmd = 'source venv/bin/activate && '
+-- Use the project's virtualenv interpreter directly (no shell-specific `activate` needed)
+local function python_cmd()
+  local is_win = vim.fn.has 'win32' == 1
+  for _, venv in ipairs { '.venv', 'venv' } do
+    local python = is_win and venv .. '/Scripts/python.exe' or venv .. '/bin/python'
+    if vim.fn.executable(python) == 1 then return vim.fn.fnamemodify(python, ':p') end
   end
-  return cmd
+  -- On Windows `python3` is usually the Microsoft Store stub
+  if is_win or vim.fn.executable 'python3' == 0 then return 'python' end
+  return 'python3'
 end
 
-vim.keymap.set('n', '<leader>op', function()
-  Terminal:new({
-    cmd = python_env() .. 'python3',
-    env = { PYTHONPATH = vim.fn.getcwd() },
-  }):toggle()
-end, { desc = '[O]pen [P]ython console' })
+vim.keymap.set(
+  'n',
+  '<leader>op',
+  function()
+    Terminal:new({
+      cmd = python_cmd(),
+      env = { PYTHONPATH = vim.fn.getcwd() },
+    }):toggle()
+  end,
+  { desc = '[O]pen [P]ython console' }
+)
 
 vim.keymap.set('n', '<leader>oc', function()
   Terminal:new({
