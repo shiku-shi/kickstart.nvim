@@ -44,13 +44,19 @@ jobs:
       - name: Start the config and run checks
         working-directory: ${{ runner.temp }}/game/scripts
         timeout-minutes: 20
-        run: nvim --headless player.gd -c "luafile $XDG_CONFIG_HOME/nvim/.github/ci/check.lua"
+        # On a fresh machine vim.pack asks "These plugins will be installed... Proceed?" via
+        # confirm(), which blocks forever in headless mode. Auto-accept it (--cmd runs before
+        # init.lua), and close stdin so any other prompt fails fast instead of hanging.
+        run: >
+          nvim --headless
+          --cmd "lua vim.fn.confirm = function(_, _, default) return default or 1 end"
+          player.gd -c "luafile $XDG_CONFIG_HOME/nvim/.github/ci/check.lua" < /dev/null
 
       - name: Godot wrapper opens files in the running instance (macOS)
         if: runner.os == 'macOS'
         working-directory: ${{ runner.temp }}/game
         run: |
-          nvim --headless &
+          nvim --headless < /dev/null &
           for i in $(seq 1 30); do [ -S /tmp/godot.pipe ] && break; sleep 1; done
           "$XDG_CONFIG_HOME/nvim/scripts/godot-nvim.sh" "$PWD/scripts/player.gd" 3 2
           sleep 1
