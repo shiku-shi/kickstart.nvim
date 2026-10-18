@@ -29,7 +29,16 @@ local function start_server()
   pcall(vim.fn.serverstart, pipe) -- fails quietly if another instance already owns the pipe
 end
 
-vim.api.nvim_create_autocmd({ 'VimEnter', 'BufEnter' }, {
-  group = vim.api.nvim_create_augroup('custom-godot-server', { clear = true }),
-  callback = start_server,
+local group = vim.api.nvim_create_augroup('custom-godot-server', { clear = true })
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  group = group,
+  callback = function()
+    -- Opened from Godot (cwd is the script's folder): move to the project root
+    local root = vim.fs.root(0, 'project.godot')
+    if root and vim.fs.normalize(vim.fn.getcwd()) ~= vim.fs.normalize(root) then vim.fn.chdir(root) end
+    start_server()
+  end,
 })
+
+vim.api.nvim_create_autocmd('BufEnter', { group = group, callback = start_server })
