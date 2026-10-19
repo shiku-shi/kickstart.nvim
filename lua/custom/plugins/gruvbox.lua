@@ -1,7 +1,2 @@
-return {
-  'ellisonleao/gruvbox.nvim',
-  priority = 1000,
-  config = function()
-    require('gruvbox').setup {}
-  end,
-}
+vim.pack.add { 'https://github.com/ellisonleao/gruvbox.nvim' }
+require('gruvbox').setup {}

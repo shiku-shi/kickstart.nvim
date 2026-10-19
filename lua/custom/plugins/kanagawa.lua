@@ -1,7 +1,2 @@
-return {
-  'rebelot/kanagawa.nvim',
-  priority = 1000,
-  config = function()
-    require('kanagawa').setup {}
-  end,
-}
+vim.pack.add { 'https://github.com/rebelot/kanagawa.nvim' }
+require('kanagawa').setup {}

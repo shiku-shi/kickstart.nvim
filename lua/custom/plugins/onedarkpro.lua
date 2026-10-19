@@ -1,7 +1,2 @@
-return {
-  'olimorris/onedarkpro.nvim',
-  priority = 997,
-  config = function()
-    require('onedarkpro').setup {}
-  end,
-}
+vim.pack.add { 'https://github.com/olimorris/onedarkpro.nvim' }
+require('onedarkpro').setup {}
