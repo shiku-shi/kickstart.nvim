@@ -9,6 +9,9 @@ lint.linters_by_ft = {
   gdscript = { 'gdlint' },
 }
 
+-- Use our markdownlint config (raises MD013 line length from 80 to 120)
+lint.linters.markdownlint.args = { '--stdin', '--config', vim.fn.stdpath 'config' .. '/.markdownlint.json' }
+
 -- To allow other plugins to add linters to require('lint').linters_by_ft,
 -- instead set linters_by_ft like this:
 -- lint.linters_by_ft = lint.linters_by_ft or {}
